@@ -104,7 +104,7 @@ pages = [
     ]
 ]
 
-def drawPage():
+def drawPage(): 
     app.currentLabels.clear()
     app.currentLabels.add(
         Rect(15, 15, 370, 370, fill = rgb(250, 248, 239)),
@@ -118,22 +118,17 @@ def drawPage():
     )
     x, y = 20, 80
     line_height = 18
-    
     currentInstructions = pages[app.currentPage]
-    
     for line in currentInstructions:
         label = Label(line, x + 3, y, fill=rgb(142, 121, 102), align='left', size=14, bold = True)
         app.currentLabels.add(label)
         y += line_height
-    
     if app.currentPage > 0:
         prevLabel = Label("< Previous", 60, 40, fill=rgb(142, 121, 102), align='center', size=14, bold = True)
         app.currentLabels.add(prevLabel)
     if app.currentPage < len(pages) - 1:
         nextLabel = Label("Next >", 340, 40, fill=rgb(142, 121, 102), align='center', size=14, bold = True)
         app.currentLabels.add(nextLabel)
-
-
 
 USER_DATA_FILE = 'users.txt'
 HIGH_SCORES_FILE = 'high_scores.txt'
@@ -237,8 +232,7 @@ def handle_authentication(username, password):
     if username in users:
         if users[username] == hash_password(password):
             return 1
-        else:
-            return 2
+        return 2
     else:
         users[username] = hash_password(password)
         write_users(users)
@@ -257,7 +251,7 @@ def get_leaderboard():
     return leaderboard
 
 def createSmoothCorners(width, xCenter, yCenter, backColour, topColour, height=0, radius=7):
-    if not(height):
+    if not height:
         height = width
     shapes = Group()
     half_width = width / 2
@@ -376,7 +370,7 @@ def createLeaderboard():
     return outputGroup
 
 def speedRunCreateSmoothCorners(width, xCenter, yCenter, backColour, topColour, height=0, radius=7):
-    if not(height):
+    if not height:
         height = width
     shapes = Group()
     half_width = width / 2
@@ -394,7 +388,7 @@ def speedRunCreateSmoothCorners(width, xCenter, yCenter, backColour, topColour, 
     return shapes
 
 def speedRunCreateSideSmoothCorners(width, xCenter, yCenter, backColour, topColour, height=0, direction='r', radius=7):
-    if not(height):
+    if not height:
         height = width
     shapes = Group()
     half_width = width / 2
@@ -1054,9 +1048,9 @@ for row in range(4):
         rect = Rect(xCenter, yCenter, 52.5, 52.5, fill = rgb(205, 193, 180))
         xCenter += 26.25
         yCenter += 26.25
-        Rect(xCenter - 26.25, yCenter + 26.25, 5, 5, align = 'bottom-left', fill = rgb(187, 173, 160)),
-        Rect(xCenter - 26.25, yCenter - 26.25, 5, 5, align = 'top-left', fill = rgb(187, 173, 160)),
-        Rect(xCenter + 26.25, yCenter + 26.25, 5, 5, align = 'bottom-right', fill = rgb(187, 173, 160)),
+        Rect(xCenter - 26.25, yCenter + 26.25, 5, 5, align = 'bottom-left', fill = rgb(187, 173, 160))
+        Rect(xCenter - 26.25, yCenter - 26.25, 5, 5, align = 'top-left', fill = rgb(187, 173, 160))
+        Rect(xCenter + 26.25, yCenter + 26.25, 5, 5, align = 'bottom-right', fill = rgb(187, 173, 160))
         Rect(xCenter + 26.25, yCenter - 26.25, 5, 5, align = 'top-right', fill = rgb(187, 173, 160))
         cornerCircles = Group(
             Circle(xCenter - 21.25, yCenter + 21.25, 5, fill = rgb(205, 193, 180)), 
@@ -1081,7 +1075,7 @@ gameOverScreen.add(tryAgainButton, gameOverScreenResult, gameOverScreenScore)
 gameOverScreen.visible = False
 
 def changeSpeedRunGameVisibility(visibilityBool = False):
-    if not(visibilityBool):
+    if not visibilityBool:
         resetGameSpeedRun(usernameLabel.value)
     speedRunUI.visible = visibilityBool
     speedRunTimeTrackerTileBG1.visible = visibilityBool
@@ -1105,7 +1099,7 @@ def changeSpeedRunGameVisibility(visibilityBool = False):
         speedRunReturnToMenu.toFront()
         speedRunShowSpeedRunTimes.toFront()
         speedRunRestartButton.toFront()
-    elif not(visibilityBool):
+    elif not visibilityBool:
         speedRunUI.toBack()
         speedRunTimeTrackerTileBG1.toBack()
         speedRunTimeTrackerTileBG2.toBack()
@@ -1119,7 +1113,6 @@ def changeSpeedRunGameVisibility(visibilityBool = False):
         speedRunRestartButton.toBack()
     for row in range(4):
         for col in range(4):
-            app.speedRunTiles[row][col]
             rect, label, cornerCircles, cornerRects = app.speedRunTileShapes[row][col]
             rect.visible = visibilityBool
             label.visible = visibilityBool
@@ -1130,7 +1123,7 @@ def changeSpeedRunGameVisibility(visibilityBool = False):
                 label.toFront()
                 cornerRects.toFront()
                 cornerCircles.toFront()
-            elif not(visibilityBool):
+            elif not visibilityBool:
                 rect.toBack()
                 label.toBack()
                 cornerRects.toBack()
@@ -1198,7 +1191,7 @@ def merge(row):
                 highScore.value = score.value
                 mainMenuHighScoreLabel.value = score.value
                 highScoreTrophy.right = mainMenuHighScoreLabel.left - 10
-                resultNotNeeded = submit_high_score(usernameLabel.value, highScore.value)
+                submit_high_score(usernameLabel.value, highScore.value)
             merged_row[item + 1] = 0
     merged_row = [num for num in merged_row if num != 0]
     return merged_row + [0] * (4 - len(merged_row))
@@ -1304,6 +1297,17 @@ def resetGame(testing = None):
         setupBoardForTesting(testing)
 
 def onKeyPress(key):
+    if app.isShowingInstructions:
+        if key == 'left' and app.currentPage > 0:
+            app.currentPage -= 1
+        if key == 'right' and app.currentPage < len(pages) - 1:
+            app.currentPage += 1
+        drawPage()
+        if key == 'escape':
+            app.isShowingInstructions = False
+            app.inMainMenu = True
+            app.currentLabels.clear()
+            mainMenu.toFront()
     if app.inClassicGame:
         if key == 'escape':
             app.inClassicGame = False
@@ -1337,13 +1341,13 @@ def onKeyPress(key):
             showGameOverScreen(result)
             return
         moved = False
-        if key == 'up' or key == 'w':
+        if key in ['up', 'w']:
             moved = moveUp()
-        if key == 'down' or key == 's':
+        if key in ['down', 's']:
             moved = moveDown()
-        if key == 'left' or key == 'a':
+        if key in ['left', 'a']:
             moved = moveLeft()
-        if key == 'right' or key == 'd':
+        if key in ['right', 'd']:
             moved = moveRight()
         if moved:
             addRandomTile()
@@ -1365,7 +1369,7 @@ def onKeyPress(key):
             signInUsernameLabel.value = currentSignInUsernameValue
             app.isEditingSignUpUsername = False
             app.isSigningIn = True
-            if signInUsernameLabel.value == 'usename' or signInUsernameLabel.value == '':
+            if signInUsernameLabel.value in ['username', '']:
                 signInUsernameLabel.fill = rgb(170, 150, 130)
                 signInUsernameLabel.size = 15
                 signInUsernameLabel.value = 'username'
@@ -1381,7 +1385,7 @@ def onKeyPress(key):
             signInUsernameLabel.value = currentSignInUsernameValue
             app.isEditingSignUpUsername = False
             app.isSigningIn = True
-            if signInUsernameLabel.value == 'username' or signInUsernameLabel.value == '':
+            if signInUsernameLabel.value in ['username', '']:
                 signInUsernameLabel.fill = rgb(170, 150, 130)
                 signInUsernameLabel.size = 15
                 signInUsernameLabel.value = 'username'
@@ -1397,7 +1401,7 @@ def onKeyPress(key):
             signInPasswordLabel.value = currentSignInPasswordValue
             app.isEditingSignUpPassword = False
             app.isSigningIn = True
-            if signInPasswordLabel.value == 'password' or signInPasswordLabel.value == '':
+            if signInPasswordLabel.value in ['password', '']:
                 signInPasswordLabel.fill = rgb(170, 150, 130)
                 signInPasswordLabel.size = 15
                 signInPasswordLabel.value = 'password'
@@ -1413,16 +1417,16 @@ def onKeyPress(key):
             signInPasswordLabel.value = currentSignInPasswordValue
             app.isEditingSignUpPassword = False
             app.isSigningIn = True
-            if signInPasswordLabel.value == 'password' or signInPasswordLabel.value == '':
+            if signInPasswordLabel.value in ['password', '']:
                 signInPasswordLabel.fill = rgb(170, 150, 130)
                 signInPasswordLabel.size = 15
                 signInPasswordLabel.value = 'password'
 
     if app.isSigningIn:
-        if (key == 'down' or key == 's') and signInOptionSelector.position != 3:
+        if (key in ['down', 's']) and signInOptionSelector.position != 3:
             signInOptionSelector.centerY += 70
             signInOptionSelector.position += 1
-        if (key == 'up' or key == 'w') and signInOptionSelector.position != 1:
+        if (key in ['up', 'w']) and signInOptionSelector.position != 1:
             signInOptionSelector.centerY -= 70
             signInOptionSelector.position -= 1
         if key == 'escape':
@@ -1438,7 +1442,7 @@ def onKeyPress(key):
                 app.isSigningIn = False
                 signInUsernameLabel.fill = rgb(142, 121, 102)
                 signInUsernameLabel.size = 18
-            elif signInOptionSelector.position == 2 and not(app.justExitedSignUpEditingMode):
+            elif signInOptionSelector.position == 2 and not app.justExitedSignUpEditingMode:
                 signInPasswordLabel.value = '_'
                 app.isEditingSignUpPassword = True
                 app.isSigningIn = False
@@ -1471,7 +1475,7 @@ def onKeyPress(key):
             app.isShowingLoginResult = False
     
     if app.inSpeedRunGame:
-        if not(app.hasStartedSpeedRunning) and (key in ['up', 'down', 'right', 'left', 'w', 'a', 's', 'd']) and not(app.gridIsFull):
+        if not app.hasStartedSpeedRunning and (key in ['up', 'down', 'right', 'left', 'w', 'a', 's', 'd']) and not app.gridIsFull:
             app.speedRunStartTime = time.time()
             app.hasStartedSpeedRunning = True
         if key == 'r':
@@ -1483,13 +1487,13 @@ def onKeyPress(key):
             app.hasStartedSpeedRunning = False
             return
         moved = False
-        if key == 'up' or key == 'w':
+        if key in ['up', 'w']:
             moved = moveUpSpeedRun()
-        if key == 'down' or key == 's':
+        if key in ['down', 's']:
             moved = moveDownSpeedRun()
-        if key == 'left' or key == 'a':
+        if key in ['left', 'a']:
             moved = moveLeftSpeedRun()
-        if key == 'right' or key == 'd':
+        if key in ['right', 'd']:
             moved = moveRightSpeedRun()
         if moved:
             addRandomTileSpeedRun()
@@ -1538,10 +1542,10 @@ def onKeyPress(key):
 
 
     if app.inMainMenu:
-        if (key == 'down' or key == 's') and selector.position != 4:
+        if (key in ['down', 's']) and selector.position != 4:
             selector.centerY += 70
             selector.position += 1
-        if (key == 'up' or key == 'w') and selector.position != 2:
+        if (key in ['up', 'w']) and selector.position != 2:
             selector.centerY -= 70
             selector.position -= 1
         if key == 'enter':
@@ -1553,27 +1557,17 @@ def onKeyPress(key):
                 app.inMainMenu = False
                 app.inSpeedRunGame = True
                 changeSpeedRunGameVisibility(True)
-            elif selector.position == 4 and not(app.isLoggedIn):
+            elif selector.position == 4 and not app.isLoggedIn:
                 app.isSigningIn = True
                 app.inMainMenu = False
                 signInScreen.visible = True
                 signInScreen.toFront()
-        if key == 'i':
-            app.inMainMenu = False
-            app.isShowingInstructions = True
-
-    if app.isShowingInstructions:
-        if key == 'left' and app.currentPage > 0:
-            app.currentPage -= 1
-        if key == 'right' and app.currentPage < len(pages) - 1:
-            app.currentPage += 1
-        drawPage()
+    if app.isShowingLeaderboard:
         if key == 'escape':
-            app.isShowingInstructions = False
-            app.inMainMenu = True
+            app.isShowingLeaderboard = False
             mainMenu.visible = True
-            app.currentLabels.clear()
-            mainMenu.toFront()
+            app.inMainMenu = True
+            app.leaderboard.clear()
     if app.isShowingSpeedRunLeaderboard:
         if key == 'escape':
             app.isShowingSpeedRunLeaderboard = False
@@ -1591,7 +1585,7 @@ def onMousePress(mouseX, mouseY):
             mainMenu.visible = False
             app.inClassicGame = True
             selector.centerY = 220
-        if signInButton.hits(mouseX, mouseY) and not(app.isLoggedIn):
+        if signInButton.hits(mouseX, mouseY) and not app.isLoggedIn:
             app.isSigningIn = True
             app.inMainMenu = False
             selector.centerY = 360
@@ -1625,7 +1619,7 @@ def onMousePress(mouseX, mouseY):
 
 def onStep():
     if app.inSpeedRunGame:
-        if app.hasStartedSpeedRunning and not(app.gridIsFull):
+        if app.hasStartedSpeedRunning and not app.gridIsFull:
             elapsed_time = time.time() - app.speedRunStartTime
             minutes = int(elapsed_time // 60)
             seconds = int(elapsed_time % 60)
