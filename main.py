@@ -105,8 +105,6 @@ pages = [
 ]
 
 def drawPage():
-    
-    # Clear previous labels
     app.currentLabels.clear()
     app.currentLabels.add(
         Rect(15, 15, 370, 370, fill = rgb(250, 248, 239)),
@@ -118,20 +116,16 @@ def drawPage():
         createUICornerCircles(370, 200, 200, rgb(236, 231, 220)),
         Label('Instructions', 200, 40, fill = rgb(142, 121, 102), font = 'arial', bold = True, size = 20, align = 'center')
     )
-    # Set the initial position for the text
     x, y = 20, 80
     line_height = 18
     
-    # Get the current page of instructions
     currentInstructions = pages[app.currentPage]
     
-    # Draw each line of the current page
     for line in currentInstructions:
         label = Label(line, x + 3, y, fill=rgb(142, 121, 102), align='left', size=14, bold = True)
         app.currentLabels.add(label)
         y += line_height
     
-    # Show page navigation hints
     if app.currentPage > 0:
         prevLabel = Label("< Previous", 60, 40, fill=rgb(142, 121, 102), align='center', size=14, bold = True)
         app.currentLabels.add(prevLabel)
@@ -1310,17 +1304,6 @@ def resetGame(testing = None):
         setupBoardForTesting(testing)
 
 def onKeyPress(key):
-    if app.isShowingInstructions:
-        if key == 'left' and app.currentPage > 0:
-            app.currentPage -= 1
-        if key == 'right' and app.currentPage < len(pages) - 1:
-            app.currentPage += 1
-        drawPage()
-        if key == 'escape':
-            app.isShowingInstructions = False
-            app.inMainMenu = True
-            app.currentLabels.clear()
-            mainMenu.toFront()
     if app.inClassicGame:
         if key == 'escape':
             app.inClassicGame = False
@@ -1575,12 +1558,22 @@ def onKeyPress(key):
                 app.inMainMenu = False
                 signInScreen.visible = True
                 signInScreen.toFront()
-    if app.isShowingLeaderboard:
+        if key == 'i':
+            app.inMainMenu = False
+            app.isShowingInstructions = True
+
+    if app.isShowingInstructions:
+        if key == 'left' and app.currentPage > 0:
+            app.currentPage -= 1
+        if key == 'right' and app.currentPage < len(pages) - 1:
+            app.currentPage += 1
+        drawPage()
         if key == 'escape':
-            app.isShowingLeaderboard = False
-            mainMenu.visible = True
+            app.isShowingInstructions = False
             app.inMainMenu = True
-            app.leaderboard.clear()
+            mainMenu.visible = True
+            app.currentLabels.clear()
+            mainMenu.toFront()
     if app.isShowingSpeedRunLeaderboard:
         if key == 'escape':
             app.isShowingSpeedRunLeaderboard = False
